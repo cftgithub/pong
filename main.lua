@@ -100,7 +100,7 @@ function love.keypressed(key)
         love.event.quit()
     end
 
-    if key == 'enter' or key == 'return' then
+    if key == 'space' then
         if gameState == 'title' then
             gameState = 'serve'
         elseif gameState == 'serve' then
@@ -121,12 +121,12 @@ function love.draw()
         love.graphics.setFont(LARGE_FONT)
         love.graphics.printf('Pre50 Pong', 0, 10, VIRTUAL_WIDTH, 'center')
         love.graphics.setFont(SMALL_FONT)
-        love.graphics.printf('Press Enter', 0, VIRTUAL_HEIGHT - 32, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Press Spacebar to Play!', 0, VIRTUAL_HEIGHT - 32, VIRTUAL_WIDTH, 'center')
     end
 
     if gameState == 'serve' then
         love.graphics.setFont(SMALL_FONT)
-        love.graphics.printf('Press Enter to Serve!', 0, 10, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Press Spacebar to Serve!', 0, 10, VIRTUAL_WIDTH, 'center')
     end
 
     if gameState == 'win' then
@@ -134,7 +134,7 @@ function love.draw()
         local winner = player1.score >= 5 and '1' or '2'
         love.graphics.printf('Player ' .. winner ..' wins!', 0, 10, VIRTUAL_WIDTH, 'center')
         love.graphics.setFont(SMALL_FONT)
-        love.graphics.printf('Press Enter to Restart', 0, VIRTUAL_HEIGHT - 32, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Press Spacebar to Restart', 0, VIRTUAL_HEIGHT - 32, VIRTUAL_WIDTH, 'center')
     end
 
     love.graphics.rectangle('fill', player1.x, player1.y, PADDLE_WIDTH, PADDLE_HEIGHT)
