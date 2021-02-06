@@ -63,7 +63,7 @@ function love.update(dt)
             player2.score = player2.score + 1
             resetBall()
 
-            if player2.score >= 3 then
+            if player2.score >= 5 then
                 gameState = 'win'
            else
                 gameState = 'serve'
@@ -72,7 +72,7 @@ function love.update(dt)
             player1.score = player1.score + 1
             resetBall()
 
-            if player1.score >= 3 then
+            if player1.score >= 5 then
                 gameState = 'win'
             else
                 gameState = 'serve'
@@ -131,7 +131,7 @@ function love.draw()
 
     if gameState == 'win' then
         love.graphics.setFont(LARGE_FONT)
-        local winner = player1.score >= 3 and '1' or '2'
+        local winner = player1.score >= 5 and '1' or '2'
         love.graphics.printf('Player ' .. winner ..' wins!', 0, 10, VIRTUAL_WIDTH, 'center')
         love.graphics.setFont(SMALL_FONT)
         love.graphics.printf('Press Enter to Restart', 0, VIRTUAL_HEIGHT - 32, VIRTUAL_WIDTH, 'center')
