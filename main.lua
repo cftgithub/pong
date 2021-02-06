@@ -61,36 +61,37 @@ function love.update(dt)
 
         if ball.x <= 0 then
             player2.score = player2.score + 1
-           resetBall()
-            gameState = 'serve'
+            resetBall()
+
+            if player2.score >= 3 then
+                gameState = 'win'
+           else
+                gameState = 'serve'
+           end
         elseif ball.x >= VIRTUAL_WIDTH - BALL_SIZE then
             player1.score = player1.score + 1
             resetBall()
-            gameState = 'serve'
+
+            if player1.score >= 3 then
+                gameState = 'win'
+            else
+                gameState = 'serve'
+            end
         end
-    --        if player2.score >= 3 then
-    --         gameState = 'win'
-    --        else
-    --         gameState = 'serve'
-    --     elseif ball.x >= VIRTUAL_WIDTH - BALL_SIZE then
-    --         player1.score = player1.score + 1
-    --         resetBall()
-            -- gameState = 'serve'
-    --     end
 
         if ball.y <= 0 then
-            ball.dy = -ball.dy
+            ball.dy = -ball.dy * 1.02
         elseif ball.y >= VIRTUAL_HEIGHT - BALL_SIZE then
-            ball.dy = -ball.dy
+            ball.dy = -ball.dy * 1.02
         end
 
-    -- if collides(player1, ball) then
-    --     ball.dx = -ball.dx
-    --     ball.x = player1.x + PADDLE_WIDTH
-    -- elseif collides(player2, ball) then
-    --     ball.dx = -ball.dx
-    --     ball.x = player2.x - BALL_SIZE
-    --     end
+        if collides(player1, ball) then
+            ball.dx = -ball.dx * 1.04
+            ball.x = player1.x + PADDLE_WIDTH
+        elseif collides(player2, ball) then
+            ball.dx = -ball.dx * 1.04
+            ball.x = player2.x - BALL_SIZE
+        end
     end
 end
 
@@ -104,10 +105,13 @@ function love.keypressed(key)
             gameState = 'serve'
         elseif gameState == 'serve' then
             gameState = 'play'
+        elseif gameState == 'win' then
+            player1.score = 0
+            player2.score = 0
+            gameState = 'title'
         end
     end
 end
-
 
 function love.draw()
     push:start()
@@ -125,6 +129,14 @@ function love.draw()
         love.graphics.printf('Press Enter to Serve!', 0, 10, VIRTUAL_WIDTH, 'center')
     end
 
+    if gameState == 'win' then
+        love.graphics.setFont(LARGE_FONT)
+        local winner = player1.score >= 3 and '1' or '2'
+        love.graphics.printf('Player ' .. winner ..' wins!', 0, 10, VIRTUAL_WIDTH, 'center')
+        love.graphics.setFont(SMALL_FONT)
+        love.graphics.printf('Press Enter to Restart', 0, VIRTUAL_HEIGHT - 32, VIRTUAL_WIDTH, 'center')
+    end
+
     love.graphics.rectangle('fill', player1.x, player1.y, PADDLE_WIDTH, PADDLE_HEIGHT)
     love.graphics.rectangle('fill', player2.x, player2.y, PADDLE_WIDTH, PADDLE_HEIGHT)
     love.graphics.rectangle('fill', ball.x, ball.y, BALL_SIZE, BALL_SIZE)
@@ -136,11 +148,9 @@ function love.draw()
     push:finish()
 end
 
-
-
--- function collides(p, b)
---     return not (p.x > b.x + BALL_SIZE or p.y > b.y + BALL_SIZE or b.x > p.x + PADDLE_WIDTH or b.y > p.y + PADDLE_HEIGHT)
--- end
+function collides(p, b)
+    return not (p.x > b.x + BALL_SIZE or p.y > b.y + BALL_SIZE or b.x > p.x + PADDLE_WIDTH or b.y > p.y + PADDLE_HEIGHT)
+end
 
 function resetBall()
     ball.x = VIRTUAL_WIDTH / 2 - BALL_SIZE / 2
